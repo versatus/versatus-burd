@@ -4,7 +4,7 @@
   "transaction": {
     "from": "0x100444c7D04A842D19bc3eE63cB7b96682FF3f43",
     "to": "0x100444c7D04A842D19bc3eE63cB7b96682FF3f43",
-    "transactionInputs": "{\"address\": \"0x1a2b3c4d5e6f70819293a4b5c6d7e8f9\",\"username\": \"hathbanger\", \"handle\": \"hathbanger\", \"imgUrl\": \"https://foo-bar.jpg\"}",
+    "transactionInputs": "{\"address\": \"0x100444c7D04A842D19bc3eE63cB7b96682FF3f43\",\"username\": \"hathbanger\", \"handle\": \"hathbanger\", \"imgUrl\": \"https://foo-bar.jpg\"}",
     "nonce": "0x0000000000000000000000000000000000000000000000000000000000000001",
     "op": "addUser",
     "programId": "0x100444c7D04A842D19bc3eE63cB7b96682FF3f43",
@@ -47,17 +47,19 @@
           "to": "0x57234c52617e7ca8edc5577ebe3eb38d53a77607",
           "totalSupply": "1000000000000000000000000"
         },
-        "tokenIds": [],
+        "tokenIds": ["0x00000000000000000000000000000000000000000000cd67ce2c6fbd8a400000"],
         "allowance": {},
         "approvals": {},
         "data": {
-          "users": "{\"address\": \"0x57234c52617e7ca8edc5577ebe3eb38d53a77607\",\"username\": \"hathbanger\", \"handle\": \"hathbanger\", \"imgUrl\": \"https://foo-bar.jpg\"}"
+          "users": "{\"0x57234c52617e7ca8edc5577ebe3eb38d53a77607\":\"{\\\"address\\\": \\\"0x57234c52617e7ca8edc5577ebe3eb38d53a77607\\\",\\\"username\\\": \\\"hathbanger\\\", \\\"handle\\\": \\\"hathbanger\\\", \\\"imgUrl\\\": \\\"https://woo-bar.jpg\\\"}\"}"
         },
         "status": "free"
       }
     },
     "nonce": "0x000000000000000000000000000000000000000000000000000000000000001c",
-    "programAccountData": {},
+    "programAccountData": {
+        "users": "{\"0x57234c52617e7ca8edc5577ebe3eb38d53a77607\":\"{\\\"address\\\": \\\"0x57234c52617e7ca8edc5577ebe3eb38d53a77607\\\",\\\"username\\\": \\\"hathbanger\\\", \\\"handle\\\": \\\"hathbanger\\\", \\\"imgUrl\\\": \\\"https://woo-bar.jpg\\\"}\"}"
+    },
     "programAccountMetadata": {
       "content_id": "bafyreidhfvw4jiqom72332brsln3micsa4b7grur4rixkwvyrh6u4i3ecy",
       "initializedSupply": "1000000000000000000000000",
