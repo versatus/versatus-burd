@@ -12,7 +12,7 @@ Burd is a decentralized microblogging platform built on the Versatus' [LASR (Lan
 
 ## Usage
 
-The `Burd` contract enables several actions that can be performed on the blockchain:
+The `Burd` program enables several actions that can be performed on the blockchain:
 
 - **Add User**: Create a new user profile on the blockchain.
 - **Tweet**: Post a new tweet from your profile.
@@ -20,7 +20,7 @@ The `Burd` contract enables several actions that can be performed on the blockch
 - **Follow**: Follow another user.
 - **Delete Tweet**: Remove a tweet from your profile.
 
-To interact with the contract, use the provided methods through a command line interface or integrate them into your application.
+To interact with the program, use the provided methods through a command line interface or integrate them into your application.
 
 ## Try It Out
 
