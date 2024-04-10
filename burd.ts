@@ -38,6 +38,9 @@ class Burd extends Program {
     Object.assign(this.methodStrategies, {
       addUser: this.addUser.bind(this),
       create: this.create.bind(this),
+      deleteTweet: this.deleteTweet.bind(this),
+      follow: this.follow.bind(this),
+      like: this.like.bind(this),
       tweet: this.tweet.bind(this),
     })
   }
@@ -191,6 +194,78 @@ class Burd extends Program {
     }
   }
 
+  follow(computeInputs: ComputeInputs){
+    try {
+      const txInputs = parseTxInputs(computeInputs)
+      const { address } = txInputs
+      const { from } = computeInputs.transaction
+
+      const currDate = new Date().toISOString()
+
+      const updatedFollows = {
+        [`follow-${currDate}`]: address,
+      }
+
+      const dataStr = validateAndCreateJsonString(updatedFollows)
+
+      const updateUserObject = buildTokenUpdateField({
+        field: 'data',
+        value: dataStr,
+        action: 'extend',
+      })
+
+      const tokenUpdateInstruction = buildUpdateInstruction({
+        update: new TokenOrProgramUpdate(
+            'tokenUpdate',
+            new TokenUpdate(
+                new AddressOrNamespace(new Address(from)),
+                new AddressOrNamespace(THIS),
+                [updateUserObject]
+            )
+        ),
+      })
+
+      return new Outputs(computeInputs, [tokenUpdateInstruction]).toJson()
+    } catch (e) {
+      throw e
+    }
+  }
+
+  like(computeInputs: ComputeInputs){
+    try {
+      const txInputs = parseTxInputs(computeInputs)
+      const { from } = computeInputs.transaction
+      const { date, posterAddress } = txInputs
+
+      const updatedLikes = {
+        [`like-${date}-${from}`]: posterAddress,
+      }
+
+      const dataStr = validateAndCreateJsonString(updatedLikes)
+
+      const updateUserObject = buildTokenUpdateField({
+        field: 'data',
+        value: dataStr,
+        action: 'extend',
+      })
+
+      const tokenUpdateInstruction = buildUpdateInstruction({
+        update: new TokenOrProgramUpdate(
+            'tokenUpdate',
+            new TokenUpdate(
+                new AddressOrNamespace(new Address(posterAddress)),
+                new AddressOrNamespace(THIS),
+                [updateUserObject]
+            )
+        ),
+      })
+
+      return new Outputs(computeInputs, [tokenUpdateInstruction]).toJson()
+    } catch (e) {
+      throw e
+    }
+  }
+
   tweet(computeInputs: ComputeInputs) {
     try {
       const { from } = computeInputs.transaction
@@ -227,6 +302,38 @@ class Burd extends Program {
       return new Outputs(computeInputs, [tokenUpdateInstruction]).toJson()
     } catch (e) {
       throw e
+    }
+  }
+
+  deleteTweet(computeInputs: ComputeInputs){
+    try{
+        const txInputs = parseTxInputs(computeInputs)
+        const { from } = computeInputs.transaction
+        const { tweetId } = txInputs
+
+        validate(tweetId, 'missing tweetId')
+
+        const updateUserObject = buildTokenUpdateField({
+            field: 'data',
+            value: tweetId,
+            action: 'remove',
+        })
+
+        const tokenUpdateInstruction = buildUpdateInstruction({
+            update: new TokenOrProgramUpdate(
+                'tokenUpdate',
+                new TokenUpdate(
+                    new AddressOrNamespace(new Address(from)),
+                    new AddressOrNamespace(THIS),
+                    [updateUserObject]
+                )
+            ),
+        })
+
+        return new Outputs(computeInputs, [tokenUpdateInstruction]).toJson()
+
+    } catch (e) {
+     throw e
     }
   }
 }

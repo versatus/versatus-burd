@@ -1,12 +1,12 @@
 {
   "contractInputs": "{\"0x1a2b3c4d5e6f70819293a4b5c6d7e8f9\":\"0x0000000000000000000000000000000000000000000000000000000000000001\"}",
-  "op": "tweet",
+  "op": "like",
   "transaction": {
-    "from": "0x100444c7D04A842D19bc3eE63cB7b96682FF3f43",
+    "from": "0x57234c52617e7ca8edc5577ebe3eb38d53a77607",
     "to": "0x100444c7D04A842D19bc3eE63cB7b96682FF3f43",
-    "transactionInputs": "{\"tweet\":\"this is my first tweet\"}",
+    "transactionInputs": "{\"tweetId\":\"0\",\"posterAddress\":\"0x482830d7655fb8465a43844fc1530a7713781b49\"}",
     "nonce": "0x0000000000000000000000000000000000000000000000000000000000000001",
-    "op": "tweet",
+    "op": "like",
     "programId": "0x100444c7D04A842D19bc3eE63cB7b96682FF3f43",
     "r": "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
     "s": "0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321",
@@ -51,7 +51,7 @@
         "allowance": {},
         "approvals": {},
         "data": {
-          "tweets": "{}"
+          "tweets": "{\"tweet-0\":\"this is my first tweet\"}"
         },
         "status": "free"
       }
