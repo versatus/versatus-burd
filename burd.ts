@@ -26,7 +26,6 @@ import {
   getCurrentSupply,
   parseAvailableTokenIds,
   parseMetadata,
-  parseProgramTokenInfo,
   parseTxInputs,
   validate,
   validateAndCreateJsonString,
@@ -50,8 +49,6 @@ class Burd extends Program {
       const txInputs = parseTxInputs(computeInputs)
       const { programId } = computeInputs.transaction
       const { address, username, handle, imgUrl } = txInputs
-
-      const programTokenInfo = parseProgramTokenInfo(computeInputs)
       const programAccountData = computeInputs.accountInfo.programAccountData
       const currUsers = JSON.parse(programAccountData?.users)
       const userDataStr = validateAndCreateJsonString({
@@ -60,20 +57,16 @@ class Burd extends Program {
         handle,
         imgUrl,
       })
-
       const updatedUsers = {
         ...currUsers,
         [address]: userDataStr,
       }
-
       const dataStr = validateAndCreateJsonString(updatedUsers)
-
       const updateUserObject = buildTokenUpdateField({
         field: 'data',
         value: dataStr,
         action: 'extend',
       })
-
       const programUpdateInstructions = buildUpdateInstruction({
         update: new TokenOrProgramUpdate(
             'tokenUpdate',
@@ -84,9 +77,7 @@ class Burd extends Program {
             )
         ),
       })
-
       const tokenIds = parseAvailableTokenIds(computeInputs)
-
       if (!tokenIds) {
         throw new Error('No tokenIds available')
       }
@@ -101,7 +92,6 @@ class Burd extends Program {
         tokenAddress: programId,
         tokenIds: [tokenIds[0]],
       })
-
       return new Outputs(computeInputs, [
         programUpdateInstructions,
         transferInstruction,
@@ -128,19 +118,14 @@ class Burd extends Program {
       const currentSupply = (
           currSupply + parseInt(initializedSupply)
       ).toString()
-
       const methods = 'addUser,create,tweet'
-
       validate(collection, 'missing collection')
-
       const metadataStr = validateAndCreateJsonString(metadata)
-
       const addProgramMetadata = buildProgramUpdateField({
         field: 'metadata',
         value: metadataStr,
         action: 'extend',
       })
-
       const dataValues = {
         type: 'non-fungible',
         imgUrl,
@@ -148,15 +133,12 @@ class Burd extends Program {
         tweets: '{}',
         methods,
       } as Record<string, string>
-
       const dataStr = validateAndCreateJsonString(dataValues)
-
       const addProgramData = buildProgramUpdateField({
         field: 'data',
         value: dataStr,
         action: 'extend',
       })
-
       const programUpdateInstructions = buildUpdateInstruction({
         update: new TokenOrProgramUpdate(
             'programUpdate',
@@ -166,7 +148,6 @@ class Burd extends Program {
             ])
         ),
       })
-
       const distributionInstruction = buildTokenDistributionInstruction({
         programId: THIS,
         initializedSupply,
@@ -174,7 +155,6 @@ class Burd extends Program {
         to: THIS,
         nonFungible: true,
       })
-
       const createInstruction = buildCreateInstruction({
         from,
         totalSupply,
@@ -184,7 +164,6 @@ class Burd extends Program {
         programNamespace: THIS,
         distributionInstruction,
       })
-
       return new Outputs(computeInputs, [
         createInstruction,
         programUpdateInstructions,
@@ -199,21 +178,16 @@ class Burd extends Program {
       const txInputs = parseTxInputs(computeInputs)
       const { address } = txInputs
       const { from } = computeInputs.transaction
-
       const currDate = new Date().toISOString()
-
       const updatedFollows = {
         [`follow-${currDate}`]: address,
       }
-
       const dataStr = validateAndCreateJsonString(updatedFollows)
-
       const updateUserObject = buildTokenUpdateField({
         field: 'data',
         value: dataStr,
         action: 'extend',
       })
-
       const tokenUpdateInstruction = buildUpdateInstruction({
         update: new TokenOrProgramUpdate(
             'tokenUpdate',
@@ -224,7 +198,6 @@ class Burd extends Program {
             )
         ),
       })
-
       return new Outputs(computeInputs, [tokenUpdateInstruction]).toJson()
     } catch (e) {
       throw e
@@ -236,19 +209,15 @@ class Burd extends Program {
       const txInputs = parseTxInputs(computeInputs)
       const { from } = computeInputs.transaction
       const { date, posterAddress } = txInputs
-
       const updatedLikes = {
         [`like-${date}-${from}`]: posterAddress,
       }
-
       const dataStr = validateAndCreateJsonString(updatedLikes)
-
       const updateUserObject = buildTokenUpdateField({
         field: 'data',
         value: dataStr,
         action: 'extend',
       })
-
       const tokenUpdateInstruction = buildUpdateInstruction({
         update: new TokenOrProgramUpdate(
             'tokenUpdate',
@@ -259,7 +228,6 @@ class Burd extends Program {
             )
         ),
       })
-
       return new Outputs(computeInputs, [tokenUpdateInstruction]).toJson()
     } catch (e) {
       throw e
@@ -271,23 +239,17 @@ class Burd extends Program {
       const { from } = computeInputs.transaction
       const txInputs = parseTxInputs(computeInputs)
       const { tweet } = txInputs
-
       validate(tweet, 'missing tweet')
-
       const currDate = new Date().toISOString()
-
       const updatedTweets = {
         [`tweet-${currDate}`]: tweet,
       }
-
       const dataStr = validateAndCreateJsonString(updatedTweets)
-
       const updateUserObject = buildTokenUpdateField({
         field: 'data',
         value: dataStr,
         action: 'extend',
       })
-
       const tokenUpdateInstruction = buildUpdateInstruction({
         update: new TokenOrProgramUpdate(
             'tokenUpdate',
@@ -298,7 +260,6 @@ class Burd extends Program {
             )
         ),
       })
-
       return new Outputs(computeInputs, [tokenUpdateInstruction]).toJson()
     } catch (e) {
       throw e
@@ -310,15 +271,12 @@ class Burd extends Program {
         const txInputs = parseTxInputs(computeInputs)
         const { from } = computeInputs.transaction
         const { tweetId } = txInputs
-
         validate(tweetId, 'missing tweetId')
-
         const updateUserObject = buildTokenUpdateField({
             field: 'data',
             value: tweetId,
             action: 'remove',
         })
-
         const tokenUpdateInstruction = buildUpdateInstruction({
             update: new TokenOrProgramUpdate(
                 'tokenUpdate',
@@ -329,7 +287,6 @@ class Burd extends Program {
                 )
             ),
         })
-
         return new Outputs(computeInputs, [tokenUpdateInstruction]).toJson()
 
     } catch (e) {
