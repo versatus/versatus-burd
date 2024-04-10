@@ -1,6 +1,6 @@
 # Burd
 
-Burd is a decentralized microblogging platform built on the Versatus' [LASR (Language Agnostic Stateless Rollup)](https://versatus.io/blog/introducing-versatus-lasr-the-worlds-first-stateless-rolllup), allowing users to tweet, like, follow, and manage their digital identity with blockchain technology. This project leverages `@versatus/versatus-javascript` to interact with the Versatus blockchain, enabling secure and verifiable transactions for social interactions.
+Burd is a decentralized microblogging platform built on the Versatus' [LASR (Language Agnostic Stateless Rollup)](https://versatus.io/blog/introducing-versatus-lasr-the-worlds-first-stateless-rolllup), allowing users to tweet, like, follow, and manage their digital identity cryptographically. This project leverages `@versatus/versatus-javascript` to interact with [LASR](https://versatus.io/blog/introducing-versatus-lasr-the-worlds-first-stateless-rolllup), enabling secure and verifiable transactions for social interactions.
 
 ## Features
 
@@ -9,18 +9,6 @@ Burd is a decentralized microblogging platform built on the Versatus' [LASR (Lan
 - **Follow**: Users can follow other accounts, subscribing to their updates.
 - **User Management**: Users can create a profile with a username, handle, and profile picture.
 - **Tweet Management**: Users can delete their tweets.
-
-## Getting Started
-
-### Prerequisites
-
-Ensure you have Node.js installed on your machine. This project requires Node.js 12.x or newer.
-
-### Installation
-
-1. Clone the repository and navigate into the project directory.
-2. Install the dependencies.
-3. Start the project.
 
 ## Usage
 
