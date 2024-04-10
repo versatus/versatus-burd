@@ -1,6 +1,6 @@
 # Burd
 
-Burd is a decentralized microblogging platform built on the Versatus blockchain, allowing users to tweet, like, follow, and manage their digital identity with blockchain technology. This project leverages `@versatus/versatus-javascript` to interact with the Versatus blockchain, enabling secure and verifiable transactions for social interactions.
+Burd is a decentralized microblogging platform built on the Versatus' [LASR (Language Agnostic Stateless Rollup)](https://versatus.io/blog/introducing-versatus-lasr-the-worlds-first-stateless-rolllup), allowing users to tweet, like, follow, and manage their digital identity with blockchain technology. This project leverages `@versatus/versatus-javascript` to interact with the Versatus blockchain, enabling secure and verifiable transactions for social interactions.
 
 ## Features
 
