@@ -76,14 +76,7 @@ class Burd extends Program {
 
       const approveUser = buildTokenUpdateField({
         field: 'approvals',
-        value: [
-          [
-            address,
-            [
-              '0x0000000000000000000000000000000000000000000000000000000000000001',
-            ],
-          ],
-        ],
+        value: [[address, [ZERO_VALUE]]],
         action: 'extend',
       })
 
