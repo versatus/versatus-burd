@@ -1,4 +1,4 @@
-import { ComputeInputs } from '@versatus/versatus-javascript'
+import { ComputeInputs, ZERO_VALUE } from '@versatus/versatus-javascript'
 
 import {
   buildCreateInstruction,
@@ -9,14 +9,8 @@ import {
   buildUpdateInstruction,
 } from '@versatus/versatus-javascript'
 import { THIS } from '@versatus/versatus-javascript'
-import {
-  Program,
-  ProgramUpdate,
-} from '@versatus/versatus-javascript'
-import {
-  Address,
-  AddressOrNamespace,
-} from '@versatus/versatus-javascript'
+import { Program, ProgramUpdate } from '@versatus/versatus-javascript'
+import { Address, AddressOrNamespace } from '@versatus/versatus-javascript'
 import {
   TokenOrProgramUpdate,
   TokenUpdate,
@@ -40,6 +34,7 @@ class Burd extends Program {
       deleteTweet: this.deleteTweet.bind(this),
       follow: this.follow.bind(this),
       like: this.like.bind(this),
+      unlike: this.unlike.bind(this),
       tweet: this.tweet.bind(this),
     })
   }
@@ -67,16 +62,42 @@ class Burd extends Program {
         value: dataStr,
         action: 'extend',
       })
+
       const programUpdateInstructions = buildUpdateInstruction({
         update: new TokenOrProgramUpdate(
-            'tokenUpdate',
-            new TokenUpdate(
-                new AddressOrNamespace(THIS),
-                new AddressOrNamespace(THIS),
-                [updateUserObject]
-            )
+          'tokenUpdate',
+          new TokenUpdate(
+            new AddressOrNamespace(THIS),
+            new AddressOrNamespace(THIS),
+            [updateUserObject],
+          ),
         ),
       })
+
+      const approveUser = buildTokenUpdateField({
+        field: 'approvals',
+        value: [
+          [
+            address,
+            [
+              '0x0000000000000000000000000000000000000000000000000000000000000001',
+            ],
+          ],
+        ],
+        action: 'extend',
+      })
+
+      const approvedSignUpUserInstruction = buildUpdateInstruction({
+        update: new TokenOrProgramUpdate(
+          'tokenUpdate',
+          new TokenUpdate(
+            new AddressOrNamespace(THIS),
+            new AddressOrNamespace(THIS),
+            [approveUser],
+          ),
+        ),
+      })
+
       const tokenIds = parseAvailableTokenIds(computeInputs)
       if (!tokenIds) {
         throw new Error('No tokenIds available')
@@ -92,8 +113,10 @@ class Burd extends Program {
         tokenAddress: programId,
         tokenIds: [tokenIds[0]],
       })
+
       return new Outputs(computeInputs, [
         programUpdateInstructions,
+        approvedSignUpUserInstruction,
         transferInstruction,
       ]).toJson()
     } catch (e) {
@@ -116,7 +139,7 @@ class Burd extends Program {
       const imgUrl = txInputs?.imgUrl
       const collection = txInputs?.collection
       const currentSupply = (
-          currSupply + parseInt(initializedSupply)
+        currSupply + parseInt(initializedSupply)
       ).toString()
       const methods = 'addUser,create,tweet'
       validate(collection, 'missing collection')
@@ -130,7 +153,6 @@ class Burd extends Program {
         type: 'non-fungible',
         imgUrl,
         users: '{}',
-        tweets: '{}',
         methods,
       } as Record<string, string>
       const dataStr = validateAndCreateJsonString(dataValues)
@@ -141,11 +163,11 @@ class Burd extends Program {
       })
       const programUpdateInstructions = buildUpdateInstruction({
         update: new TokenOrProgramUpdate(
-            'programUpdate',
-            new ProgramUpdate(new AddressOrNamespace(THIS), [
-              addProgramMetadata,
-              addProgramData,
-            ])
+          'programUpdate',
+          new ProgramUpdate(new AddressOrNamespace(THIS), [
+            addProgramMetadata,
+            addProgramData,
+          ]),
         ),
       })
       const distributionInstruction = buildTokenDistributionInstruction({
@@ -173,7 +195,7 @@ class Burd extends Program {
     }
   }
 
-  follow(computeInputs: ComputeInputs){
+  follow(computeInputs: ComputeInputs) {
     try {
       const txInputs = parseTxInputs(computeInputs)
       const { address } = txInputs
@@ -190,12 +212,12 @@ class Burd extends Program {
       })
       const tokenUpdateInstruction = buildUpdateInstruction({
         update: new TokenOrProgramUpdate(
-            'tokenUpdate',
-            new TokenUpdate(
-                new AddressOrNamespace(new Address(from)),
-                new AddressOrNamespace(THIS),
-                [updateUserObject]
-            )
+          'tokenUpdate',
+          new TokenUpdate(
+            new AddressOrNamespace(new Address(from)),
+            new AddressOrNamespace(THIS),
+            [updateUserObject],
+          ),
         ),
       })
       return new Outputs(computeInputs, [tokenUpdateInstruction]).toJson()
@@ -204,15 +226,23 @@ class Burd extends Program {
     }
   }
 
-  like(computeInputs: ComputeInputs){
+  like(computeInputs: ComputeInputs) {
     try {
       const txInputs = parseTxInputs(computeInputs)
       const { from } = computeInputs.transaction
-      const { date, posterAddress } = txInputs
+      const { tweetId, posterAddress } = txInputs
+
+      const dateStr = validate(
+        tweetId.replace('tweet-', ''),
+        'missing / invalid tweet id',
+      )
+      validate(posterAddress, 'missing posterAddress')
+
       const updatedLikes = {
-        [`like-${date}-${from}`]: posterAddress,
+        [`like-${dateStr}-${from}`]: posterAddress,
       }
       const dataStr = validateAndCreateJsonString(updatedLikes)
+
       const updateUserObject = buildTokenUpdateField({
         field: 'data',
         value: dataStr,
@@ -220,12 +250,45 @@ class Burd extends Program {
       })
       const tokenUpdateInstruction = buildUpdateInstruction({
         update: new TokenOrProgramUpdate(
-            'tokenUpdate',
-            new TokenUpdate(
-                new AddressOrNamespace(new Address(posterAddress)),
-                new AddressOrNamespace(THIS),
-                [updateUserObject]
-            )
+          'tokenUpdate',
+          new TokenUpdate(
+            new AddressOrNamespace(new Address(posterAddress)),
+            new AddressOrNamespace(THIS),
+            [updateUserObject],
+          ),
+        ),
+      })
+      return new Outputs(computeInputs, [tokenUpdateInstruction]).toJson()
+    } catch (e) {
+      throw e
+    }
+  }
+
+  unlike(computeInputs: ComputeInputs) {
+    try {
+      const txInputs = parseTxInputs(computeInputs)
+      const { from } = computeInputs.transaction
+      const { tweetId, posterAddress } = txInputs
+
+      const dateStr = validate(
+        tweetId.replace('tweet-', ''),
+        'missing / invalid tweet id',
+      )
+      validate(posterAddress, 'missing posterAddress')
+
+      const updateUserObject = buildTokenUpdateField({
+        field: 'data',
+        value: `like-${dateStr}-${from}`,
+        action: 'remove',
+      })
+      const tokenUpdateInstruction = buildUpdateInstruction({
+        update: new TokenOrProgramUpdate(
+          'tokenUpdate',
+          new TokenUpdate(
+            new AddressOrNamespace(new Address(posterAddress)),
+            new AddressOrNamespace(THIS),
+            [updateUserObject],
+          ),
         ),
       })
       return new Outputs(computeInputs, [tokenUpdateInstruction]).toJson()
@@ -252,12 +315,12 @@ class Burd extends Program {
       })
       const tokenUpdateInstruction = buildUpdateInstruction({
         update: new TokenOrProgramUpdate(
-            'tokenUpdate',
-            new TokenUpdate(
-                new AddressOrNamespace(new Address(from)),
-                new AddressOrNamespace(THIS),
-                [updateUserObject]
-            )
+          'tokenUpdate',
+          new TokenUpdate(
+            new AddressOrNamespace(new Address(from)),
+            new AddressOrNamespace(THIS),
+            [updateUserObject],
+          ),
         ),
       })
       return new Outputs(computeInputs, [tokenUpdateInstruction]).toJson()
@@ -266,31 +329,30 @@ class Burd extends Program {
     }
   }
 
-  deleteTweet(computeInputs: ComputeInputs){
-    try{
-        const txInputs = parseTxInputs(computeInputs)
-        const { from } = computeInputs.transaction
-        const { tweetId } = txInputs
-        validate(tweetId, 'missing tweetId')
-        const updateUserObject = buildTokenUpdateField({
-            field: 'data',
-            value: tweetId,
-            action: 'remove',
-        })
-        const tokenUpdateInstruction = buildUpdateInstruction({
-            update: new TokenOrProgramUpdate(
-                'tokenUpdate',
-                new TokenUpdate(
-                    new AddressOrNamespace(new Address(from)),
-                    new AddressOrNamespace(THIS),
-                    [updateUserObject]
-                )
-            ),
-        })
-        return new Outputs(computeInputs, [tokenUpdateInstruction]).toJson()
-
+  deleteTweet(computeInputs: ComputeInputs) {
+    try {
+      const txInputs = parseTxInputs(computeInputs)
+      const { from } = computeInputs.transaction
+      const { tweetId } = txInputs
+      validate(tweetId, 'missing tweetId')
+      const updateUserObject = buildTokenUpdateField({
+        field: 'data',
+        value: tweetId,
+        action: 'remove',
+      })
+      const tokenUpdateInstruction = buildUpdateInstruction({
+        update: new TokenOrProgramUpdate(
+          'tokenUpdate',
+          new TokenUpdate(
+            new AddressOrNamespace(new Address(from)),
+            new AddressOrNamespace(THIS),
+            [updateUserObject],
+          ),
+        ),
+      })
+      return new Outputs(computeInputs, [tokenUpdateInstruction]).toJson()
     } catch (e) {
-     throw e
+      throw e
     }
   }
 }
