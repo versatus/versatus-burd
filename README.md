@@ -42,4 +42,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
 
-Project Link: [https://github.com/versatus/versatus-burd](https://github.com/verstatus/versatus-burd)
+Project Link: [https://github.com/versatus/versatus-burd](https://github.com/versatus/versatus-burd)
