@@ -10,6 +10,7 @@ bunx lasrctl build burd.ts
 bunx lasrctl test -b burd -i burd-inputs
 bunx lasrctl deploy -b burd -a your-name -n burd -p "BURD" -s BURD --initializedSupply 100 -t 100 --txInputs '{"imgUrl":"https://pbs.twimg.com/media/GKuNIgAa4AALDce?format=jpg&name=medium","collection":"burd"}' --createTestFilePath burd-inputs/burd-create.json
 ```
+
 ## Starting Frontend
 Take the returned program address from the deployment and update `NEXT_PUBLIC_BURD_PROGRAM_ADDRESS` in the `.env` file.
 Add the address from the `lasr/.lasr/wallet/keypair.json` to the `NEXT_PUBLIC_BURD_OWNER_ADDRESS` variable to the `.env` file.
