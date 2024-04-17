@@ -24,13 +24,10 @@ export const BurdProvider = ({ children }: { children: ReactNode }) => {
     useState<boolean>(false);
 
   useEffect(() => {
-    if (
-      BURD_PROGRAM_ADDRESS !== "undefined" &&
-      BURD_OWNER_ADDRESS !== "undefined"
-    ) {
+    if (BURD_PROGRAM_ADDRESS || BURD_OWNER_ADDRESS) {
       setHasAllNeededEnvVars(true);
     }
-  }, []);
+  }, [BURD_PROGRAM_ADDRESS, BURD_OWNER_ADDRESS]);
 
   useEffect(() => {
     if (data) {
@@ -45,6 +42,7 @@ export const BurdProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (users && data && hasAllNeededEnvVars) {
       users.forEach((user) => {
+        if (!user.address) return;
         fetchAccount(user.address).then((accountData) => {
           const tweets = parseTweetsFromAccount(accountData);
           tweets.forEach((tweet) => {
@@ -94,7 +92,7 @@ export const BurdProvider = ({ children }: { children: ReactNode }) => {
 export const useBurd = () => {
   const context = useContext(BurdContext);
   if (context === undefined) {
-    throw new Error("useBurdContext must be used within a BurdProvider");
+    throw new Error("useBurd must be used within a BurdProvider");
   }
   return context;
 };

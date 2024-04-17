@@ -8,17 +8,20 @@ export async function GET(
   {
     params,
   }: {
-    params: { address: string }
+    params: { programAddress: string }
   }
 ) {
   if (!LASR_RPC_URL) {
-    return NextResponse.json({ error: 'lasr rpc url missing' }, { status: 404 })
+    return NextResponse.json(
+      { error: 'lasr rpc url missing from ENV' },
+      { status: 404 }
+    )
   }
 
   const response = await axios.post(LASR_RPC_URL, {
     jsonrpc: '2.0',
     method: 'lasr_getAccount',
-    params: [params.address],
+    params: [params.programAddress],
     id: 1,
   })
 

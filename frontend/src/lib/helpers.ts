@@ -57,6 +57,7 @@ export const fetchAccount = async (address: string) => {
 };
 
 export const parseTweetsFromAccount = (account: any) => {
+  if (!BURD_PROGRAM_ADDRESS) return [];
   if (!account?.programs) return [];
   return Object.entries(account?.programs[BURD_PROGRAM_ADDRESS].data)
     .filter(([key, _]) => key.indexOf("tweet-") > -1)
@@ -71,12 +72,9 @@ export const parseLikesFromAccount = (
   tweetId: string,
   address: string,
 ) => {
+  if (!BURD_PROGRAM_ADDRESS) return [];
   if (!account?.programs) return [];
-  console.log(
-    Object.entries(account?.programs[BURD_PROGRAM_ADDRESS].data).filter(
-      ([key, _]) => key.indexOf("like-") > -1,
-    ),
-  );
+
   return Object.entries(account?.programs[BURD_PROGRAM_ADDRESS].data)
     .filter(([key, _]) => key.indexOf("like-") > -1)
     .filter(([key, value]) =>
