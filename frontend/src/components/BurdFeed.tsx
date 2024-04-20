@@ -1,43 +1,43 @@
-import React from "react";
-import { Tweet } from "@/components/Tweet";
+import React from 'react'
+import { Churp } from '@/components/Churp'
 
-const BurdFeed = ({ tweets }: { tweets: object }) => {
+const BurdFeed = ({ churps }: { churps: object }) => {
   return (
     <div className="w-full flex flex-col items-center">
-      {tweets &&
-        Object.values(tweets)
+      {churps &&
+        Object.values(churps)
           ?.sort(
             (
               a: { date: string | number | Date },
-              b: { date: string | number | Date },
-            ) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+              b: { date: string | number | Date }
+            ) => new Date(b.date).getTime() - new Date(a.date).getTime()
           )
           .map(
-            (tweet: {
-              id: string;
-              date: string;
-              address: string;
-              tweet: string;
-              username: string;
-              handle: string;
-              imgUrl: string;
-              likes: any[];
+            (churp: {
+              id: string
+              date: string
+              address: string
+              churp: string
+              username: string
+              handle: string
+              imgUrl: string
+              likes: any[]
             }) => (
-              <Tweet
-                key={tweet.date}
-                posterAddress={tweet.address}
-                content={tweet.tweet}
-                dateTime={tweet.date}
-                id={tweet.id}
-                profileImageUrl={tweet.imgUrl}
-                username={tweet.username}
-                displayName={tweet.handle}
-                likes={tweet.likes}
+              <Churp
+                key={churp.date}
+                posterAddress={churp.address}
+                content={churp.churp}
+                dateTime={churp.date}
+                id={churp.id}
+                profileImageUrl={churp.imgUrl}
+                username={churp.username}
+                displayName={churp.handle}
+                likes={churp.likes}
               />
-            ),
+            )
           )}
     </div>
-  );
-};
+  )
+}
 
-export default BurdFeed;
+export default BurdFeed

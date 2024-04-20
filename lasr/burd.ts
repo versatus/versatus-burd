@@ -31,11 +31,11 @@ class Burd extends Program {
     Object.assign(this.methodStrategies, {
       addUser: this.addUser.bind(this),
       create: this.create.bind(this),
-      deleteTweet: this.deleteTweet.bind(this),
+      deleteChurp: this.deleteChurp.bind(this),
       follow: this.follow.bind(this),
       like: this.like.bind(this),
       unlike: this.unlike.bind(this),
-      tweet: this.tweet.bind(this),
+      churp: this.churp.bind(this),
     })
   }
 
@@ -134,7 +134,7 @@ class Burd extends Program {
       const currentSupply = (
         currSupply + parseInt(initializedSupply)
       ).toString()
-      const methods = 'addUser,create,tweet'
+      const methods = 'addUser,create,churp'
       validate(collection, 'missing collection')
       const metadataStr = validateAndCreateJsonString(metadata)
       const addProgramMetadata = buildProgramUpdateField({
@@ -223,11 +223,11 @@ class Burd extends Program {
     try {
       const txInputs = parseTxInputs(computeInputs)
       const { from } = computeInputs.transaction
-      const { tweetId, posterAddress } = txInputs
+      const { churpId, posterAddress } = txInputs
 
       const dateStr = validate(
-        tweetId.replace('tweet-', ''),
-        'missing / invalid tweet id',
+        churpId.replace('churp-', ''),
+        'missing / invalid churp id',
       )
       validate(posterAddress, 'missing posterAddress')
 
@@ -261,11 +261,11 @@ class Burd extends Program {
     try {
       const txInputs = parseTxInputs(computeInputs)
       const { from } = computeInputs.transaction
-      const { tweetId, posterAddress } = txInputs
+      const { churpId, posterAddress } = txInputs
 
       const dateStr = validate(
-        tweetId.replace('tweet-', ''),
-        'missing / invalid tweet id',
+        churpId.replace('churp-', ''),
+        'missing / invalid churp id',
       )
       validate(posterAddress, 'missing posterAddress')
 
@@ -290,17 +290,17 @@ class Burd extends Program {
     }
   }
 
-  tweet(computeInputs: ComputeInputs) {
+  churp(computeInputs: ComputeInputs) {
     try {
       const { from } = computeInputs.transaction
       const txInputs = parseTxInputs(computeInputs)
-      const { tweet } = txInputs
-      validate(tweet, 'missing tweet')
+      const { churp } = txInputs
+      validate(churp, 'missing churp')
       const currDate = new Date().toISOString()
-      const updatedTweets = {
-        [`tweet-${currDate}`]: tweet,
+      const updatedChurps = {
+        [`churp-${currDate}`]: churp,
       }
-      const dataStr = validateAndCreateJsonString(updatedTweets)
+      const dataStr = validateAndCreateJsonString(updatedChurps)
       const updateUserObject = buildTokenUpdateField({
         field: 'data',
         value: dataStr,
@@ -322,15 +322,15 @@ class Burd extends Program {
     }
   }
 
-  deleteTweet(computeInputs: ComputeInputs) {
+  deleteChurp(computeInputs: ComputeInputs) {
     try {
       const txInputs = parseTxInputs(computeInputs)
       const { from } = computeInputs.transaction
-      const { tweetId } = txInputs
-      validate(tweetId, 'missing tweetId')
+      const { churpId } = txInputs
+      validate(churpId, 'missing churpId')
       const updateUserObject = buildTokenUpdateField({
         field: 'data',
-        value: tweetId,
+        value: churpId,
         action: 'remove',
       })
       const tokenUpdateInstruction = buildUpdateInstruction({

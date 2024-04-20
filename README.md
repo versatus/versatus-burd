@@ -1,6 +1,6 @@
 # Burd
 
-Burd is a decentralized microblogging platform built on the Versatus' [LASR (Language Agnostic Stateless Rollup)](https://versatus.io/blog/introducing-versatus-lasr-the-worlds-first-stateless-rolllup), allowing users to tweet, like,  and manage their digital identity cryptographically. This project leverages `@versatus/versatus-javascript` to interact with [LASR](https://versatus.io/blog/introducing-versatus-lasr-the-worlds-first-stateless-rolllup), enabling secure and verifiable transactions for social interactions.
+Burd is a decentralized microblogging platform built on the Versatus' [LASR (Language Agnostic Stateless Rollup)](https://versatus.io/blog/introducing-versatus-lasr-the-worlds-first-stateless-rolllup), allowing users to churp, like,  and manage their digital identity cryptographically. This project leverages `@versatus/versatus-javascript` to interact with [LASR](https://versatus.io/blog/introducing-versatus-lasr-the-worlds-first-stateless-rolllup), enabling secure and verifiable transactions for social interactions.
 
 ## Deploying BURD 
 ```bash
@@ -24,19 +24,19 @@ bun dev
 
 ## Features
 
-- **Tweet**: Users can post tweets on their profile.
-- **Like**: Users can like tweets, showing appreciation for content.
+- **Churp**: Users can post churps on their profile.
+- **Like**: Users can like churps, showing appreciation for content.
 - **User Management**: Users can create a profile with a username, handle, and profile picture.
-- **Tweet Management**: Users can delete their tweets.
+- **Churp Management**: Users can delete their churps.
 
 ## Usage
 
 The `Burd` program enables several actions that can be performed on the blockchain:
 
 - **Add User**: Create a new user profile on the blockchain.
-- **Tweet**: Post a new tweet from your profile.
-- **Like**: Like an existing tweet.
-- **Delete Tweet**: Remove a tweet from your profile.
+- **Churp**: Post a new churp from your profile.
+- **Like**: Like an existing churp.
+- **Delete Churp**: Remove a churp from your profile.
 
 To interact with the program, use the provided methods through a command line interface or integrate them into your application.
 

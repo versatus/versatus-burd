@@ -7,7 +7,7 @@ import { useLasrWallet } from '@/providers/LasrWalletProvider'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import { useBurdAccount } from '@/providers/BurdAccountProvider'
 import BurdTitle from '@/components/BurdTitle'
-import TweetForm from '@/components/TweetForm'
+import ChurpForm from '@/components/ChurpForm'
 import SignUpForm from '@/components/SignUpForm'
 import BurdLayout from '@/components/BurdLayout'
 import BurdFeed from '@/components/BurdFeed'
@@ -22,7 +22,7 @@ const BurdCage: FC = () => {
   const [account, setAccount] = useState<any | undefined>()
   const { address } = useLasrWallet()
 
-  const { tweet, isTweeting, isLoading, isApproving, approve, isApproved } =
+  const { churp, isChurping, isLoading, isApproving, approve, isApproved } =
     useBurdAccount()
   const { feed, hasAllNeededEnvVars } = useBurd()
 
@@ -39,8 +39,8 @@ const BurdCage: FC = () => {
     }
   }, [address, data])
 
-  const handleNewTweet = async (tweetContent: string) => {
-    await tweet(tweetContent)
+  const handleNewChurp = async (churpContent: string) => {
+    await churp(churpContent)
   }
 
   return (
@@ -118,7 +118,7 @@ const BurdCage: FC = () => {
       ) : (
         <div className={'flex flex-col gap-2 w-full'}>
           <BurdTitle />
-          <TweetForm tweet={handleNewTweet} isTweeting={isTweeting} />
+          <ChurpForm churp={handleNewChurp} isChurping={isChurping} />
           {!isApproved(BURD_PROGRAM_ADDRESS) && !isLoading ? (
             <ButtonWithProcessing
               isSending={isApproving}
@@ -130,7 +130,7 @@ const BurdCage: FC = () => {
               }
             />
           ) : (
-            <BurdFeed tweets={feed} />
+            <BurdFeed churps={feed} />
           )}
         </div>
       )}

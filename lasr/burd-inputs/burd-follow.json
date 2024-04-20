@@ -51,14 +51,14 @@
         "allowance": {},
         "approvals": {},
         "data": {
-          "tweets": "{}"
+          "churps": "{}"
         },
         "status": "free"
       }
     },
     "nonce": "0x000000000000000000000000000000000000000000000000000000000000001c",
     "programAccountData": {
-      "tweets": "{}"
+      "churps": "{}"
     },
     "programAccountMetadata": {
       "content_id": "bafyreidhfvw4jiqom72332brsln3micsa4b7grur4rixkwvyrh6u4i3ecy",
