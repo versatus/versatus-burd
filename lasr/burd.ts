@@ -1,9 +1,9 @@
-import { ComputeInputs, ZERO_VALUE } from '@versatus/versatus-javascript'
+import { IComputeInputs, ZERO_VALUE } from '@versatus/versatus-javascript'
 
 import {
   buildCreateInstruction,
   buildProgramUpdateField,
-  buildTokenDistributionInstruction,
+  buildTokenDistribution,
   buildTokenUpdateField,
   buildTransferInstruction,
   buildUpdateInstruction,
@@ -39,7 +39,7 @@ class Burd extends Program {
     })
   }
 
-  addUser(computeInputs: ComputeInputs) {
+  addUser(computeInputs: IComputeInputs) {
     try {
       const txInputs = parseTxInputs(computeInputs)
       const { programId } = computeInputs.transaction
@@ -117,7 +117,7 @@ class Burd extends Program {
     }
   }
 
-  create(computeInputs: ComputeInputs) {
+  create(computeInputs: IComputeInputs) {
     try {
       const { transaction } = computeInputs
       const { from } = transaction
@@ -163,7 +163,7 @@ class Burd extends Program {
           ]),
         ),
       })
-      const distributionInstruction = buildTokenDistributionInstruction({
+      const distributionInstruction = buildTokenDistribution({
         programId: THIS,
         initializedSupply,
         currentSupply,
@@ -188,7 +188,7 @@ class Burd extends Program {
     }
   }
 
-  follow(computeInputs: ComputeInputs) {
+  follow(computeInputs: IComputeInputs) {
     try {
       const txInputs = parseTxInputs(computeInputs)
       const { address } = txInputs
@@ -219,7 +219,7 @@ class Burd extends Program {
     }
   }
 
-  like(computeInputs: ComputeInputs) {
+  like(computeInputs: IComputeInputs) {
     try {
       const txInputs = parseTxInputs(computeInputs)
       const { from } = computeInputs.transaction
@@ -257,7 +257,7 @@ class Burd extends Program {
     }
   }
 
-  unlike(computeInputs: ComputeInputs) {
+  unlike(computeInputs: IComputeInputs) {
     try {
       const txInputs = parseTxInputs(computeInputs)
       const { from } = computeInputs.transaction
@@ -290,7 +290,7 @@ class Burd extends Program {
     }
   }
 
-  churp(computeInputs: ComputeInputs) {
+  churp(computeInputs: IComputeInputs) {
     try {
       const { from } = computeInputs.transaction
       const txInputs = parseTxInputs(computeInputs)
@@ -322,7 +322,7 @@ class Burd extends Program {
     }
   }
 
-  deleteChurp(computeInputs: ComputeInputs) {
+  deleteChurp(computeInputs: IComputeInputs) {
     try {
       const txInputs = parseTxInputs(computeInputs)
       const { from } = computeInputs.transaction
@@ -350,38 +350,4 @@ class Burd extends Program {
   }
 }
 
-const start = (input: ComputeInputs) => {
-  try {
-    const contract = new Burd()
-    return contract.start(input)
-  } catch (e) {
-    throw e
-  }
-}
-
-process.stdin.setEncoding('utf8')
-
-let data = ''
-
-process.stdin.on('readable', () => {
-  try {
-    let chunk
-
-    while ((chunk = process.stdin.read()) !== null) {
-      data += chunk
-    }
-  } catch (e) {
-    throw e
-  }
-})
-
-process.stdin.on('end', () => {
-  try {
-    const parsedData = JSON.parse(data)
-    const result = start(parsedData)
-    process.stdout.write(JSON.stringify(result))
-  } catch (err) {
-    // @ts-ignore
-    process.stdout.write(err.message)
-  }
-})
+Burd.run()

@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@versatus/versatus-javascript": "^0.1.140",
+    "@versatus/versatus-javascript": "^0.1.162",
     "axios": "^1.6.8",
     "clsx": "^2.1.0",
     "framer-motion": "^11.1.1",
