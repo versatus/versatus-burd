@@ -57,6 +57,7 @@ class Burd extends Program {
         [address]: userDataStr,
       }
       const dataStr = validateAndCreateJsonString(updatedUsers)
+
       const updateUserObject = buildTokenUpdateField({
         field: 'data',
         value: dataStr,
@@ -92,13 +93,6 @@ class Burd extends Program {
       })
 
       const tokenIds = parseAvailableTokenIds(computeInputs)
-      if (!tokenIds) {
-        throw new Error('No tokenIds available')
-      }
-
-      if (tokenIds.length === 0) {
-        throw new Error('No tokenIds available')
-      }
 
       const transferInstruction = buildTransferInstruction({
         from: programId,
@@ -154,6 +148,7 @@ class Burd extends Program {
         value: dataStr,
         action: 'extend',
       })
+
       const programUpdateInstructions = buildUpdateInstruction({
         update: new TokenOrProgramUpdate(
           'programUpdate',
@@ -163,6 +158,7 @@ class Burd extends Program {
           ]),
         ),
       })
+
       const distributionInstruction = buildTokenDistribution({
         programId: THIS,
         initializedSupply,
@@ -235,12 +231,12 @@ class Burd extends Program {
         [`like-${dateStr}-${from}`]: posterAddress,
       }
       const dataStr = validateAndCreateJsonString(updatedLikes)
-
       const updateUserObject = buildTokenUpdateField({
         field: 'data',
         value: dataStr,
         action: 'extend',
       })
+
       const tokenUpdateInstruction = buildUpdateInstruction({
         update: new TokenOrProgramUpdate(
           'tokenUpdate',
